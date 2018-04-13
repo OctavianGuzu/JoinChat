@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="dash">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>JoinChat</title>
+  <link href="css/sb-admin.css" rel="stylesheet">
+  <!-- Bootstrap core CSS-->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom fonts for this template-->
+  <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <!-- Page level plugin CSS-->
+  <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+  <!-- Custom styles for this template-->
+  
+  <!-- <link type="text/css" href="css/map1.css" rel="stylesheet"> -->
+
+  <link rel="shortcut icon" type="image/png" href="favicon.ico"/>
+</head>
+
+<body class="fixed-nav bg-dark" id="page-top" ng-controller="dashboardController">
+  <!-- Navigation-->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+    <a class="navbar-brand" href="#" id="titleBox"></a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Chat">
+          <a class="nav-link" href="#">
+            <i class="fa fa-fw fa-map-o"></i>
+            <span class="nav-link-text">Chat</span>
+          </a>
+        </li>
+        <li class="nav-item" data-toggle="tooltip" id="NavCharts" data-placement="right" title="Profile">
+          <a class="nav-link" href="#" data-toggle="modal" data-target="#EntityModal" id="addOption">
+            <i class="fa fa-fw fa-map-pin"></i>
+            <span class="nav-link-text">Profile</span>
+          </a>
+        </li>
+        <li class="nav-item" data-toggle="tooltip" id="NavTables" data-placement="right" title="TODO1">
+          <a class="nav-link" href="#" data-toggle="modal" data-target="#EventModal" id="addEventOption">
+            <i class="fa fa-fw fa-calendar-plus-o"></i>
+            <span class="nav-link-text">TODO1</span>
+          </a>
+        </li>
+        <li class="nav-item" data-toggle="tooltip" id="NavCharts" data-placement="right" title="TODO2">
+          <a class="nav-link" href="#" data-toggle="modal" data-target="#SuggestionModal">
+            <i class="fa fa-fw fa-calendar"></i>
+            <span class="nav-link-text" id="suggestionBtn">TODO2</span>
+          </a>
+        </li>
+        <li class="nav-item" data-toggle="tooltip" id="NavTables" data-placement="right" title="TODO3" ng-show="is_admin">
+          <a class="nav-link" href="#" id="viewRequests">
+            <i class="fa fa-fw fa-clock-o"></i>
+            <span class="nav-link-text">TODO3</span>
+          </a>
+        </li>
+
+      </ul>
+      <ul class="navbar-nav sidenav-toggler">
+        <li class="nav-item">
+          <a class="nav-link text-center" id="sidenavToggler">
+            <i class="fa fa-fw fa-angle-left"></i>
+          </a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2">
+            <div class="input-group">
+              <input class="form-control" type="text" placeholder="Search for...">
+              <span class="input-group-btn">
+                <button class="btn btn-primary" type="button">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
+            <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  
+  <div class="content-wrapper" style="padding-top: 0">
+    <!-- <div class="container-fluid"> -->
+    <!-- </div> -->
+  </div>
+    <!-- /.container-fluid-->
+    <!-- /.content-wrapper-->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+    <!-- Logout Modal-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a id="LogoutBtn" role="button" class="btn btn-primary" href="/logout">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="DoneModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Which task did you finish?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Task ID</label>
+              <input class="form-control" id="IDTask" type="text" aria-describedby="Name" placeholder="Enter task ID">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <p class="text-success" ng-show="DoneSucc">Good job!</p>
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <button id="DoneBtn" type="button" class="btn btn-primary">Done</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="MsgModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="SubjectModalLabel">Subject</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="FullexampleInputEmail1" id="FullexampleInputEmail1">Message</label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button id="DoneBtn" type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <div class="modal fade" id="MessageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Send new message</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="exampleInputEmail1">Send to</label>
+
+            <select id="InputReceiver" class="form-control">
+            </select>
+
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Subject</label>
+            <input class="form-control" id="InputSubject" type="text" aria-describedby="Name" placeholder="Enter subject">
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Message</label>
+            <input class="form-control" id="InputMessage" type="text" aria-describedby="Name" placeholder="Enter Message">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <button id="MessageSendBtn" type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <div class="modal fade" id="EntityModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add new entity</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Name</label>
+              <input class="form-control" id="NameEnt" type="text" aria-describedby="Name" placeholder="Enter entity name">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Location</label>
+              <input class="form-control" id="LocationEnt" type="text" aria-describedby="Name" placeholder="Enter location">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Entity's type:   </label>
+             <!--  <input class="form-control" id="TypeEnt" type="text" aria-describedby="Name" placeholder="Enter entity's type"> -->
+             <select class="selectpicker" id="typePicker">
+              <option>Highschool</option>
+              <option>University</option>
+              <option>Public club</option>
+              <option>Private club</option>
+              <option>Private Company</option>
+            </select>
+
+
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Address</label>
+              <input class="form-control" id="AddressEnt" type="text" aria-describedby="Name" placeholder="Enter address">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Description</label>
+              <input class="form-control" id="DescriptionEnt" type="text" aria-describedby="Name" placeholder="Enter description">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Image link (optional)</label>
+              <input class="form-control" id="ImageEnt" type="text" aria-describedby="Name" placeholder="Enter image link">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Female percentage (optional)</label>
+              <input class="form-control" id="FemaleEnt" type="text" aria-describedby="Name" placeholder="Enter female percentage">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <p class="text-success" ng-show="insertSucc">Successfully added new entity!</p>
+            <p class="text-danger" ng-show="insertFail">Don't leave fields empty!</p>
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <button id="EntityInsertBtn" type="button" class="btn btn-primary" >Done</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <div class="modal fade" id="SuggestionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="showEventsTitle">Some cool events</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="exampleInputEmail1">Events near by</label>
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+              </thead>
+              <tbody id="suggestionBody">
+              <tr id="srow0"></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Events that you may like</label>
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+              </thead>
+              <tbody id="suggestionBody1">
+              <tr id="ssrow0"></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Other people also liked</label>
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+              </thead>
+              <tbody id="suggestionBody2">
+              <tr id="sssrow0"></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button id="EventInsertBtn4" type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <div class="modal fade" id="EventModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add new event</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Name</label>
+              <input class="form-control" id="NameEvent" type="text" aria-describedby="Name" placeholder="Enter event's name">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Entity:  </label>
+              <!-- <input class="form-control" id="LocationEvent" type="text" aria-describedby="Name" placeholder="Enter entity name"> -->
+              <select class="selectpicker" id="locPicker">
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Description</label>
+              <input class="form-control" id="DescEvent" type="text" aria-describedby="Name" placeholder="Enter description">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Event Date</label>
+              <input class="form-control" id="DateEvent" type="text" placeholder="Enter a Date (YYYY-MM-DD)">
+            </div>
+              <div class="form-group">
+                  <label for="exampleInputEmail1">Learn dimension</label>
+                  <input class="form-control" id="dimLearnEvent" type="number" placeholder="Enter a value from 1 to 5">
+              </div>
+              <div class="form-group">
+                  <label for="exampleInputEmail1">Teach dimension</label>
+                  <input class="form-control" id="dimTeachEvent" type="number" placeholder="Enter a value from 1 to 5">
+              </div>
+              <div class="form-group">
+                  <label for="exampleInputEmail1">Compete dimension</label>
+                  <input class="form-control" id="dimCompeteEvent" type="number" placeholder="Enter a value from 1 to 5">
+              </div>
+              <div class="form-group">
+                  <label for="exampleInputEmail1">Network dimension</label>
+                  <input class="form-control" id="dimNetworkEvent" type="number" placeholder="Enter a value from 1 to 5">
+              </div>
+              <div class="form-group">
+                  <label for="exampleInputEmail1">Build dimension</label>
+                  <input class="form-control" id="dimBuildEvent" type="number" placeholder="Enter a value from 1 to 5">
+              </div>
+          </div>
+          <div class="modal-footer">
+            <p class="text-success" ng-show="insertSucc2">Successfully added new event!</p>
+            <p class="text-danger" ng-show="insertFail2">Don't leave fields empty!</p>
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <button id="EventInsertBtn" type="button" class="btn btn-primary">Done</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="EventsShow" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="showEventsTitle">Events</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody id="eventBody">
+                <tr id="row0"></tr>
+              </tbody>
+            </table>
+          </div>
+        
+          <div class="modal-footer">
+            <button id="EventInsertBtn2" type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="RequestsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="showEventsTitle">Requests (Click on one to approve it)</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Entities</label>
+              <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="reqEntBody">
+                <tr id="rowEn0"></tr>
+              </tbody>
+            </table>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Events</label>
+              <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="reqEventBody">
+                <tr id="rowEnv0"></tr>
+              </tbody>
+            </table>
+            </div>  
+          </div>
+        
+          <div class="modal-footer">
+            <button id="EventInsertBtn3" type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Page level plugin JavaScript-->
+    <script src="vendor/datatables/jquery.dataTables.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin/sb-admin.min.js"></script>
+    <!-- Custom scripts for this page-->
+    <script src="js/sb-admin/sb-admin-datatables.min.js"></script>
+
+    <!-- Bootstrap core JavaScript-->
+
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+
+    <script src="vendor/angular/angular.min.js"></script>
+    <script src="vendor/angular/angular-route.js"></script>
+
+    <script src="js/ng/root.js"></script>
+
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="js/map.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoJWKTh1B_Hh7CuMVoGnEy3b58F9axNuY"
+      defer></script>
+
+
+
+
+    </div>
+</body>
+</html>
