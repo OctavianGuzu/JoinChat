@@ -118,4 +118,58 @@ router.get('/getUserName', function (req, res, next) {
         })
 })
 
+router.post('/addFriend', (req, res, next) => {
+	var obj;
+	for(key in req.body)
+		obj = JSON.parse(key);
+	var response = {
+		err: false
+	};
+
+    var conditions = {
+        _id: req.session.userId,
+        'friends._id': { $ne: req.query.friend_id }
+    };
+
+    var update = {
+        $addToSet: { friends: { _id : req.query.friend_id} }
+    };
+
+	User.findOneAndUpdate(conditions,
+        update,
+        function(err, model) {
+            if (err) {
+            	console.log(err);
+            	res.json({error : true});
+			}
+			else {
+            	res.json({error : false});
+			}
+        }
+    );
+});
+
+router.get('/userInfo', (req, res,next) => {
+	a = req.id;
+	if (a == null)
+		a = req.session.userId;
+
+    User.findById(a)
+        .exec(function (err, user) {
+            res.json(user);
+        })
+});
+
+router.get('/getUserFromEmail', (req, res, next) => {
+	User.findOne({ email: req.query.emailf })
+        .exec(function (err, user) {
+        	console.log(user)
+        	if (err || user == null) {
+        		console.trace(err);
+        		res.json({error : "Not found"})
+            }
+        	else
+            	res.json(user);
+        })
+});
 module.exports = router;

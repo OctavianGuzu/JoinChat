@@ -14,6 +14,7 @@ root.controller("loginController", ["$scope", "$http",function( $scope, $http ) 
 		}
 	});
 
+
     $('#RegisterBtn').click(function (e) {
         var name = $('#exampleInputName').val();
         var email = $('#exampleInputEmail1').val();
@@ -89,6 +90,24 @@ root.controller("loginController", ["$scope", "$http",function( $scope, $http ) 
 dash.controller("dashboardController", ["$scope", "$http", function( $scope, $http ) {
     $scope.entities = null;
     $scope.is_admin = false;
+
+    $('#add-friend-btn').click(function (e) {
+        var friend_email = $('#NameEvent').val()
+        $http.get('/getUserFromEmail?emailf=' + friend_email).then((result)=>{
+            if (result.data.error)
+                alert(result.data.error);
+            else
+                console.log(result.data);
+                $http.post('/addFriend?friend_id=' + result.data._id).then((result) => {
+                   if (result.data.error)
+                       alert(result.data.error);
+                   else
+                       alert("Added new friend");
+                });
+        });
+
+    });
+
     $(document).ready(function () {
 
         $http.get('/isAdmin').then(function (res) {
@@ -103,5 +122,15 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
         $http.get('/getUserName').then(function (result) {
             $('#titleBox').text("JoinChat 💬   " + result.data);
         })
+
+        $http.get('/userInfo').then(function(res) {
+            if (!res)
+                return;
+
+            var _data = res.data;
+            $('#name').text("Nume: " + _data.name);
+            $('#email').text("Email: " + _data.email);
+            console.log(_data);
+        });
     })
 }]);

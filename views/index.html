@@ -91,8 +91,10 @@
     </div>
   </nav>
 
-  
+
   <div class="content-wrapper" style="padding-top: 0">
+    <small id="name" class="display-3"> </small><br>
+    <small id="email" class="display-3"> </small>
     <!-- <div class="container-fluid"> -->
     <!-- </div> -->
   </div>
@@ -323,56 +325,22 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Add new event</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Add friend</h5>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
           </div>
           <div class="modal-body">
             <div class="form-group">
-              <label for="exampleInputEmail1">Name</label>
+              <label for="add-friend-btn">Email</label>
               <input class="form-control" id="NameEvent" type="text" aria-describedby="Name" placeholder="Enter event's name">
             </div>
-            <div class="form-group">
-              <label for="exampleInputEmail1">Entity:  </label>
-              <!-- <input class="form-control" id="LocationEvent" type="text" aria-describedby="Name" placeholder="Enter entity name"> -->
-              <select class="selectpicker" id="locPicker">
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="exampleInputEmail1">Description</label>
-              <input class="form-control" id="DescEvent" type="text" aria-describedby="Name" placeholder="Enter description">
-            </div>
-            <div class="form-group">
-              <label for="exampleInputEmail1">Event Date</label>
-              <input class="form-control" id="DateEvent" type="text" placeholder="Enter a Date (YYYY-MM-DD)">
-            </div>
-              <div class="form-group">
-                  <label for="exampleInputEmail1">Learn dimension</label>
-                  <input class="form-control" id="dimLearnEvent" type="number" placeholder="Enter a value from 1 to 5">
-              </div>
-              <div class="form-group">
-                  <label for="exampleInputEmail1">Teach dimension</label>
-                  <input class="form-control" id="dimTeachEvent" type="number" placeholder="Enter a value from 1 to 5">
-              </div>
-              <div class="form-group">
-                  <label for="exampleInputEmail1">Compete dimension</label>
-                  <input class="form-control" id="dimCompeteEvent" type="number" placeholder="Enter a value from 1 to 5">
-              </div>
-              <div class="form-group">
-                  <label for="exampleInputEmail1">Network dimension</label>
-                  <input class="form-control" id="dimNetworkEvent" type="number" placeholder="Enter a value from 1 to 5">
-              </div>
-              <div class="form-group">
-                  <label for="exampleInputEmail1">Build dimension</label>
-                  <input class="form-control" id="dimBuildEvent" type="number" placeholder="Enter a value from 1 to 5">
-              </div>
+
           </div>
           <div class="modal-footer">
             <p class="text-success" ng-show="insertSucc2">Successfully added new event!</p>
             <p class="text-danger" ng-show="insertFail2">Don't leave fields empty!</p>
-            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-            <button id="EventInsertBtn" type="button" class="btn btn-primary">Done</button>
+            <button id="add-friend-btn" type="button" class="btn btn-primary">Add friend</button>
           </div>
         </div>
       </div>
