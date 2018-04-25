@@ -174,7 +174,10 @@ router.get('/getUserFromEmail', (req, res, next) => {
 });
 
 router.get('/chatView', (req, res, next) => {
-    res.cookie('data', 123);
+	if (req.query.convID == null)
+        req.query.convID = ""
+
+    res.cookie('data', req.query.convID);
 	res.render("chat");
 });
 

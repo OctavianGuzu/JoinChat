@@ -18,8 +18,12 @@
 <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
-    $(function () {
-        var socket = io();
+    var secret = ""
+    var namespace =  "/";
+    var socket_general = {};
+    const initComm = () => {
+        var socket = io(namespace);
+        console.log(namespace);
         $('form').submit(function(){
             socket.emit('chat message', $('#m').val());
             $('#m').val('');
@@ -29,10 +33,7 @@
             $('#messages').append($('<li>').text(msg));
             window.scrollTo(0, document.body.scrollHeight);
         });
-    });
-
-
-
+    };
     const getCookie = (name) => {
         const value = "; " + document.cookie;
         const parts = value.split("; " + name + "=");
@@ -53,8 +54,15 @@
         deleteCookie('data');
 
         if (dataCookie) {
-            const data = parseObjectFromCookie(dataCookie);
-            // work with data. `data` is equal to `visitCard` from the server
+             secret = parseObjectFromCookie(dataCookie);
+             namespace += secret
+             socket_general = io();
+            socket_general.on('init conv', function (msg) {
+                    window.location.reload() // refresh to make it work. Only first viewer of conversation. stupid socket io bug.
+            })
+
+            socket_general.emit('init conv', namespace);
+            initComm();
 
         } else {
             // handle data not found
