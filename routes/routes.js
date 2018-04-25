@@ -3,8 +3,8 @@ var router = express.Router();
 var User = require('../models/user');
 var https = require('https');
 var async = require('async');
-
 // GET route for reading data
+
 router.get('/', function (req, res, next) {
   return res.render('login');
 });
@@ -150,7 +150,7 @@ router.post('/addFriend', (req, res, next) => {
 });
 
 router.get('/userInfo', (req, res,next) => {
-	a = req.id;
+	a = req.query.id;
 	if (a == null)
 		a = req.session.userId;
 
@@ -172,4 +172,10 @@ router.get('/getUserFromEmail', (req, res, next) => {
             	res.json(user);
         })
 });
+
+router.get('/chatView', (req, res, next) => {
+    res.cookie('data', 123);
+	res.render("chat");
+});
+
 module.exports = router;

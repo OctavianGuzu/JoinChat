@@ -74,6 +74,14 @@ app.use(function(err, req, res, next) {
 });
 
 // listen on port 3000
-app.listen(3003, function () {
+var server = app.listen(3003, function () {
   console.log('Express app listening on port 3003');
+});
+
+var io = require('socket.io').listen(server);
+
+io.on('connection', function(socket){
+    socket.on('chat message', function(msg){
+        io.emit('chat message', msg);
+    });
 });
