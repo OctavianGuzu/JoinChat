@@ -3,6 +3,7 @@ var router = express.Router();
 var User = require('../models/user');
 var https = require('https');
 var async = require('async');
+var Conversation = require('../models/Conversation')
 // GET route for reading data
 
 router.get('/', function (req, res, next) {
@@ -147,6 +148,13 @@ router.post('/addFriend', (req, res, next) => {
 			}
         }
     );
+
+	// For each new friend, we create a default conversation between the 2 :)
+	// //TODO
+    // Conversation.create({
+	// 	messages : [],
+	// 	users : [req.session.userId, req.query.friend_id]
+	// })
 });
 
 router.get('/userInfo', (req, res,next) => {

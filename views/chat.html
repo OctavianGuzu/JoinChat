@@ -51,11 +51,12 @@
 
     window.onload = () => {
         let dataCookie = getCookie('data');
-        deleteCookie('data');
+        //deleteCookie('data');
 
         if (dataCookie) {
-             secret = parseObjectFromCookie(dataCookie);
-             namespace += secret
+            console.log(dataCookie);
+             secret = (dataCookie);
+             namespace += secret;
              socket_general = io();
             socket_general.on('init conv', function (msg) {
                     window.location.reload() // refresh to make it work. Only first viewer of conversation. stupid socket io bug.
