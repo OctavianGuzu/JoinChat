@@ -3,8 +3,9 @@ var router = express.Router();
 var User = require('../models/user');
 var https = require('https');
 var async = require('async');
-
+var Conversation = require('../models/Conversation')
 // GET route for reading data
+
 router.get('/', function (req, res, next) {
   return res.render('login');
 });
@@ -117,5 +118,75 @@ router.get('/getUserName', function (req, res, next) {
             res.json(user.name);
         })
 })
+
+router.post('/addFriend', (req, res, next) => {
+	var obj;
+	for(key in req.body)
+		obj = JSON.parse(key);
+	var response = {
+		err: false
+	};
+
+    var conditions = {
+        _id: req.session.userId,
+        'friends._id': { $ne: req.query.friend_id }
+    };
+
+    var update = {
+        $addToSet: { friends: { _id : req.query.friend_id} }
+    };
+
+	User.findOneAndUpdate(conditions,
+        update,
+        function(err, model) {
+            if (err) {
+            	console.log(err);
+            	res.json({error : true});
+			}
+			else {
+            	res.json({error : false});
+			}
+        }
+    );
+
+	// For each new friend, we create a default conversation between the 2 :)
+	// //TODO
+    // Conversation.create({
+	// 	messages : [],
+	// 	users : [req.session.userId, req.query.friend_id]
+	// })
+});
+
+router.get('/userInfo', (req, res,next) => {
+	a = req.query.id;
+	if (a == null)
+		a = req.session.userId;
+
+    User.findById(a)
+        .exec(function (err, user) {
+            res.json(user);
+        })
+});
+
+router.get('/getUserFromEmail', (req, res, next) => {
+	User.findOne({ email: req.query.emailf })
+        .exec(function (err, user) {
+        	console.log(user)
+        	if (err || user == null) {
+        		console.trace(err);
+        		res.json({error : "Not found"})
+            }
+        	else
+            	res.json(user);
+        })
+});
+
+router.get('/chatView', (req, res, next) => {
+	if (req.query.convID == null)
+        req.query.convID = ""
+
+    res.cookie('data', req.query.convID);
+	res.render("chat");
+});
 
 module.exports = router;

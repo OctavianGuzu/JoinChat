@@ -16,6 +16,9 @@ var UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  friends :{
+    type: [UserSchema]
+  },
   administrator: {
     type: Boolean,
     required: false

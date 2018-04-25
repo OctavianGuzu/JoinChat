@@ -8,6 +8,7 @@ var cookieParser = require('cookie-parser');
 var MongoStore = require('connect-mongo')(session);
 var path = require('path');
 var routes = require('./routes/routes');
+var io_namespaces = {}
 
 //connect to MongoDB
 mongoose.connect('mongodb://localhost/joinchat');
@@ -74,6 +75,38 @@ app.use(function(err, req, res, next) {
 });
 
 // listen on port 3000
-app.listen(3003, function () {
+var server = app.listen(3003, function () {
   console.log('Express app listening on port 3003');
 });
+
+
+
+/*          SOCKET IO FUNCTIONS             */
+var io = require('socket.io').listen(server);
+
+io.on('connection', function(socket){
+    socket.on('general', function(msg){
+        io.emit('general', msg);
+    });
+
+    socket.on('init conv', function (msg) {
+        console.log("new " + msg)
+        if ( io_namespaces[msg] != null)
+            return
+
+        // replay to first person in room in order to force refresh
+        // fix stupid bug from socket io
+
+        socket.emit('init conv', 'ricardo');
+        //flow normal
+        console.log("reset");
+        var nsp = io.of(msg);
+        nsp.on('connection', function(socket){
+           socket.on('chat message', function(msg) {
+              nsp.emit('chat message', msg)
+           });
+        });
+        io_namespaces[msg] = nsp;
+    });
+});
+
