@@ -256,4 +256,45 @@ router.get('/getUserGroups', (req, res, next) => {
 		}
     })
 });
+
+router.get('/addFriendToGroup', (req, res, next) =>{
+	console.log(req.query.group);
+    console.log(req.query.fr);
+
+
+    User.findOne({ email: req.query.fr })
+        .exec(function (err, user) {
+            console.log(user)
+            if (err || user == null) {
+                console.trace(err);
+                res.json({error : true});
+                return err;
+            }
+
+
+    var conditions = {
+        _id: req.query.group,
+        'users': { $ne: user._id }
+    };
+
+    var update = {
+        $addToSet: { users: [user._id]}
+    };
+
+
+    Conversation.findOneAndUpdate(conditions,
+        update,
+        function(err, model) {
+            if (err) {
+                console.log(err);
+                res.json({error : true});
+            }
+            else {
+                res.json({error : false});
+            }
+        }
+    );
+        })
+});
+
 module.exports = router;
