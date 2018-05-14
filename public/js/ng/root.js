@@ -178,7 +178,7 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
             for (var i =0; i < _data.friends.length; i++)
             {
                 $http.get('/userInfo?id=' + _data.friends[i]["_id"]).then((res) => {
-                    $('#tbody-friends').append("<tr><td class='td-friend' id_friend='" + res.data._id+ "'>" + res.data.name +"</td></tr>");
+                    $('#tbody-friends').append("<tr><td class='td-friend' id_friend='" + res.data._id+ "'><a href=\"#\">" + res.data.name +"</a></td></tr>");
                     console.log(res.data)
                 });
             }
