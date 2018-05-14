@@ -189,4 +189,40 @@ router.get('/chatView', (req, res, next) => {
 	res.render("chat");
 });
 
+router.get('/newGroup', (req, res, next) => {
+  	var groupData = {
+  		title : req.query.groupTitle,
+		users : [req.session.userId],
+		admin: req.session.userId
+	};
+
+    Conversation.create(groupData, function (err, user) {
+        if (err) {
+            console.log("failed  " + err)
+            res.json({error : true});
+        } else {
+            console.log("added")
+            res.json({error : false});
+        }
+    })
+});
+
+router.get('/getUserGroups', (req, res, next) => {
+    var conditions = {
+        'users': req.session.userId
+    };
+
+    Conversation.find(conditions, function (err, grp) {
+		if (err)
+		{
+			console.log("could not find");
+			res.json({error : "not found"});
+        }
+		else
+		{
+			console.log("found");
+			res.json(grp)
+		}
+    })
+});
 module.exports = router;

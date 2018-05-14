@@ -91,6 +91,21 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
     $scope.entities = null;
     $scope.is_admin = false;
     $scope.data = {}
+
+    $('#add-friend-btn2').click(function (e) {
+        console.log("here")
+        var grp_title = $('#NameEven2').val()
+        $http.get('/newGroup?groupTitle=' + grp_title).then((result)=>{
+            if (result.data.error)
+                alert(result.data.error);
+            else
+                console.log(result.data);
+                alert("Created new group");
+                window.location.reload()
+        });
+
+    });
+
     $('#add-friend-btn').click(function (e) {
         var friend_email = $('#NameEvent').val()
         $http.get('/getUserFromEmail?emailf=' + friend_email).then((result)=>{
@@ -130,6 +145,26 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
             var win = window.open('http://localhost:3003/chatView?convID=' + convID, '_blank');
             win.focus()
         });
+
+
+        $("#table-groups").on("click", "td", function(e) {
+            /*TODO aici schimbam id-ul parametrul paginii cu chat
+               cu id-ul conversatiei intre cei 2. Dupa ce adaugam API
+               de create grup e lejer.
+               Mare atentie: cand 2 persoane vor deveni prieteni, se va crea
+               o conversatie automat cu cei 2 participanti*/
+            // TODO momentan facem concatenare (mare, mic).
+
+            var fid = $(this).attr('id_group');
+            var convID = "";
+            console.log($scope.data._id)
+            convID = fid;
+
+            var win = window.open('http://localhost:3003/chatView?convID=' + convID, '_blank');
+            win.focus()
+        });
+
+
         $http.get('/isAdmin').then(function (res) {
             var isAdmin = res.data;
             if (isAdmin) {
@@ -160,6 +195,14 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
                     console.log(res.data)
                 });
             }
+
+            $http.get('/getUserGroups').then((res) => {
+               var data = res.data;
+               for (var i = 0; i < data.length; i++)
+               {
+                   $('#tbody-groups').append("<tr><td class='td-group' id_group='" + data[i]._id+ "'>" + data[i].title +"</td></tr>");
+               }
+            });
         });
     })
 }]);
