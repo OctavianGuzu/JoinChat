@@ -143,7 +143,17 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
             }
          });
 
-         
+         $http.get('/getCloseFriends').then(function (result) {
+            // console.log(result);
+            if (result && result.data && result.data.close_friends) {
+                var friends = result.data.close_friends;
+                for (var i = 0; i < friends.length; i++) {
+                    $('#tbody-friends-sugg').append("<tr><td> " + friends[i].name + " (" + friends[i].email + ")" +"</td></tr>");
+                }
+             }
+         })
+
+
 
         $("#table-friends").on("click", "td", function(e) {
             /*TODO aici schimbam id-ul parametrul paginii cu chat
@@ -185,7 +195,7 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
             $scope.data = _data;
             $('#name').text("Name: " + _data.name);
             $('#email').text("Email: " + _data.email);
-            console.log(_data);
+            //console.log(_data);
 
             for (var i =0; i < _data.friends.length; i++)
             {

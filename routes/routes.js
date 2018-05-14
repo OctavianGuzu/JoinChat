@@ -220,4 +220,25 @@ router.get('/getProfilePic', (req, res, next) => {
 	})
 })
 
+router.get('/getCloseFriends', (req, res, next) => {
+	User.find({}, function (err, result) {
+		var close_friends = [];
+		var current_user;
+
+		for (var i = 0; i < result.length; i++)
+			if (result[i]._id == req.session.userId)
+				current_user = result[i];
+
+		console.log(current_user);
+
+		for (var i = 0; i < result.length; i++)
+			if (Math.abs(result[i].lat - current_user.lat) < 10 &&
+				Math.abs(result[i].long - current_user.long) &&
+				result[i]._id != current_user._id)
+				close_friends.push(result[i]);
+
+		res.json({close_friends: close_friends});
+	})
+})
+
 module.exports = router;
