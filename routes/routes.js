@@ -61,7 +61,8 @@ router.post('/register', function (req, res, next) {
 			password: obj.password,
 			administrator: false,
 			lat: 0.0,
-			long: 0.0
+			long: 0.0,
+			profilePic: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Koala_climbing_tree.jpg/360px-Koala_climbing_tree.jpg"
 		};
 
 		User.create(userData, function (err, user) {
@@ -203,8 +204,20 @@ router.post('/updateLocation', (req, res, next) => {
 		//console.log(err, result);
 		res.json({err: err});
 	})
+})
 
-	
+router.post('/updateProfilePic', (req, res, next) => {
+	var url = req.query.url;
+
+	User.updateOne({_id: req.session.userId}, {profilePic: url}, function (err, result) {
+		res.json({err: err});
+	})
+})
+
+router.get('/getProfilePic', (req, res, next) => {
+	User.findOne({_id: req.session.userId}, function (err, result) {
+		res.json({user: result});
+	})
 })
 
 module.exports = router;

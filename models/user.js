@@ -30,6 +30,10 @@ var UserSchema = new mongoose.Schema({
   long: {
     type: Number,
     required: false
+  },
+  profilePic: {
+    type: String,
+    required: false
   }
 });
 

@@ -90,6 +90,8 @@ root.controller("loginController", ["$scope", "$http",function( $scope, $http ) 
 dash.controller("dashboardController", ["$scope", "$http", function( $scope, $http ) {
     $scope.entities = null;
     $scope.is_admin = false;
+    $scope.updateProfSucc = false;
+    $scope.updateProfFail = false;
     $scope.data = {}
     $('#add-friend-btn').click(function (e) {
         var friend_email = $('#NameEvent').val()
@@ -133,6 +135,16 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
 
          $scope.getLocation();
 
+         $http.get('/getProfilePic').then(function (result) {
+            if (result) {
+                $('#profimg').attr({src: result.data.user.profilePic});
+            } else {
+                $('#profimg').attr({src: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Koala_climbing_tree.jpg/360px-Koala_climbing_tree.jpg"});
+            }
+         });
+
+         
+
         $("#table-friends").on("click", "td", function(e) {
             /*TODO aici schimbam id-ul parametrul paginii cu chat
                cu id-ul conversatiei intre cei 2. Dupa ce adaugam API
@@ -171,7 +183,7 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
 
             var _data = res.data;
             $scope.data = _data;
-            $('#name').text("Nume: " + _data.name);
+            $('#name').text("Name: " + _data.name);
             $('#email').text("Email: " + _data.email);
             console.log(_data);
 
@@ -183,5 +195,16 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
                 });
             }
         });
+
+        $('#ProfileBtn').click(function (e) {
+            var url = $('#ProfileURL').val()
+            if (!(url == "" || url == null)) {
+                //console.log(url);
+                $http.post('/updateProfilePic?url=' + url).then(function (result) {
+                    console.log(result);
+                    location.reload();
+                })
+            }
+        })
     })
 }]);
