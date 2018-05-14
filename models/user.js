@@ -22,6 +22,14 @@ var UserSchema = new mongoose.Schema({
   administrator: {
     type: Boolean,
     required: false
+  },
+  lat: {
+    type: Number,
+    required: false
+  },
+  long: {
+    type: Number,
+    required: false
   }
 });
 

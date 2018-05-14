@@ -59,7 +59,9 @@ router.post('/register', function (req, res, next) {
 			email: obj.email,
 			name: obj.name,
 			password: obj.password,
-			administrator: false
+			administrator: false,
+			lat: 0.0,
+			long: 0.0
 		};
 
 		User.create(userData, function (err, user) {
@@ -188,5 +190,21 @@ router.get('/chatView', (req, res, next) => {
     res.cookie('data', req.query.convID);
 	res.render("chat");
 });
+
+router.post('/updateLocation', (req, res, next) => {
+	// console.log(req.query);
+	// req.query.pos.coords = JSON.parse(req.query.pos.coords); 
+	var lat = req.query.lat;
+	var long = req.query.long;
+
+	//console.log(lat, long);
+
+	User.updateOne({_id: req.session.userId}, {lat: lat, long: long}, function (err, result) {
+		//console.log(err, result);
+		res.json({err: err});
+	})
+
+	
+})
 
 module.exports = router;

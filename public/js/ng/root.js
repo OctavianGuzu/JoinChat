@@ -109,7 +109,29 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
 
     });
 
+    $scope.getLocation = function() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition($scope.showPosition);
+        } else {
+            console.log("Geolocation is not supported by this browser.");
+        }
+    }
+
+    $scope.showPosition = function(position) {
+        console.log(position.coords);
+        if (position) {
+            $http.post('/updateLocation?lat=' + position.coords.latitude + '&long=' + position.coords.longitude).then(result => {
+                if (result.data.err)
+                    console.log("Error while updating location");
+                else
+                    console.log("User location updated!");
+            })
+        }
+    }
+
     $(document).ready(function () {
+
+         $scope.getLocation();
 
         $("#table-friends").on("click", "td", function(e) {
             /*TODO aici schimbam id-ul parametrul paginii cu chat
