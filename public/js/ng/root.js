@@ -244,7 +244,7 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
                var data = res.data;
                for (var i = 0; i < data.length; i++)
                {
-                   $('#tbody-groups').append("<tr><td class='td-group' id_group='" + data[i]._id+ "'>" + data[i].title +"</td></tr>");
+                   $('#tbody-groups').append("<tr><td class='td-group' id_group='" + data[i]._id+ "'><a href='#'>" + data[i].title +"</a></td></tr>");
                }
             });
         });
