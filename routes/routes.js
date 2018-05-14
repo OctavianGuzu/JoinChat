@@ -220,6 +220,7 @@ router.get('/getProfilePic', (req, res, next) => {
 	})
 })
 
+
 router.get('/getCloseFriends', (req, res, next) => {
 	User.find({}, function (err, result) {
 		var close_friends = [];
