@@ -43,6 +43,18 @@
             <span class="nav-link-text">Add friend</span>
           </a>
         </li>
+        <li class="nav-item" data-toggle="tooltip" id="NavCharts" data-placement="right" title="Create group">
+          <a class="nav-link" href="#" data-toggle="modal" data-target="#EventModal2">
+            <i class="fa fa-fw fa-calendar"></i>
+            <span class="nav-link-text" id="suggestionBtn">Create group</span>
+          </a>
+        </li>
+        <li class="nav-item" data-toggle="tooltip" id="NavTables" data-placement="right" title="TODO3" ng-show="is_admin">
+          <a class="nav-link" href="#" id="viewRequests">
+            <i class="fa fa-fw fa-clock-o"></i>
+            <span class="nav-link-text">TODO3</span>
+          </a>
+        </li>
 
       </ul>
       <ul class="navbar-nav sidenav-toggler">
@@ -108,10 +120,23 @@
         </table>
       </div>
     </div>
+    <small id="name" class="display-3"> </small><br>
+    <small id="email" class="display-3"> </small>
+
+    <table class="table" id="table-groups">
+      <thead>
+      <tr>
+        <th>Groups (click to start chat)</th>
+      </tr>
+      </thead>
+      <tbody id="tbody-groups">
+      </tbody>
+    </table>
     <!-- <div class="container-fluid"> -->
     <!-- </div> -->
   </div>
-    <!-- /.container-fluid-->
+
+  <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
     <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
@@ -313,7 +338,7 @@
           <div class="modal-body">
             <div class="form-group">
               <label for="add-friend-btn">Email</label>
-              <input class="form-control" id="NameEvent" type="text" aria-describedby="Name" placeholder="Friend's email">
+              <input class="form-control" id="NameEvent" type="text" aria-describedby="Name" placeholder="Enter friend's email">
             </div>
 
           </div>
@@ -325,6 +350,32 @@
         </div>
       </div>
     </div>
+
+  <div class="modal fade" id="EventModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabe2">Create group</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="add-friend-btn">Name</label>
+            <input class="form-control" id="NameEven2" type="text" aria-describedby="Name" placeholder="Enter group's name">
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <p class="text-success" ng-show="insertSucc2">Successfully added new event!</p>
+          <p class="text-danger" ng-show="insertFail2">Don't leave fields empty!</p>
+          <button id="add-friend-btn2" type="button" class="btn btn-primary">Create group</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
     <div class="modal fade" id="EventsShow" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">

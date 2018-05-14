@@ -21,11 +21,21 @@
     var secret = ""
     var namespace =  "/";
     var socket_general = {};
+    var name = ""
     const initComm = () => {
         var socket = io(namespace);
         console.log(namespace);
         $('form').submit(function(){
-            socket.emit('chat message', $('#m').val());
+            var data2 = $('#m').val();
+            if (data2.indexOf("/add") === 0) {
+                var fr = data2.split(" ")[1]
+                $.get( "/addFriendToGroup?group=" + secret + "&fr=" + fr, function( data ) {
+                    console.log(data)
+                    $('#m').val('');
+                });
+                return false;
+            }
+            socket.emit('chat message', "[ " + name + " ] " + $('#m').val());
             $('#m').val('');
             return false;
         });
@@ -52,7 +62,9 @@
     window.onload = () => {
         let dataCookie = getCookie('data');
         //deleteCookie('data');
-
+        $.get("/getUserName", function(data){
+           name = data;
+        });
         if (dataCookie) {
             console.log(dataCookie);
              secret = (dataCookie);

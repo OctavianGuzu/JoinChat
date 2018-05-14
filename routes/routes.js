@@ -220,6 +220,7 @@ router.get('/getProfilePic', (req, res, next) => {
 	})
 })
 
+
 router.get('/getCloseFriends', (req, res, next) => {
 	User.find({}, function (err, result) {
 		var close_friends = [];
@@ -240,5 +241,82 @@ router.get('/getCloseFriends', (req, res, next) => {
 		res.json({close_friends: close_friends});
 	})
 })
+
+router.get('/newGroup', (req, res, next) => {
+  	var groupData = {
+  		title : req.query.groupTitle,
+		users : [req.session.userId],
+		admin: req.session.userId
+	};
+
+    Conversation.create(groupData, function (err, user) {
+        if (err) {
+            console.log("failed  " + err)
+            res.json({error : true});
+        } else {
+            console.log("added")
+            res.json({error : false});
+        }
+    })
+});
+
+router.get('/getUserGroups', (req, res, next) => {
+    var conditions = {
+        'users': req.session.userId
+    };
+
+    Conversation.find(conditions, function (err, grp) {
+		if (err)
+		{
+			console.log("could not find");
+			res.json({error : "not found"});
+        }
+		else
+		{
+			console.log("found");
+			res.json(grp)
+		}
+    })
+});
+
+router.get('/addFriendToGroup', (req, res, next) =>{
+	console.log(req.query.group);
+    console.log(req.query.fr);
+
+
+    User.findOne({ email: req.query.fr })
+        .exec(function (err, user) {
+            console.log(user)
+            if (err || user == null) {
+                console.trace(err);
+                res.json({error : true});
+                return err;
+            }
+
+
+    var conditions = {
+        _id: req.query.group,
+        'users': { $ne: user._id }
+    };
+
+    var update = {
+        $addToSet: { users: [user._id]}
+    };
+
+
+    Conversation.findOneAndUpdate(conditions,
+        update,
+        function(err, model) {
+            if (err) {
+                console.log(err);
+                res.json({error : true});
+            }
+            else {
+                res.json({error : false});
+            }
+        }
+    );
+        })
+});
 
 module.exports = router;

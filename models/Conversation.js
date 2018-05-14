@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
-
 var ConversationSchema = new mongoose.Schema({
 
 
@@ -17,7 +16,15 @@ var ConversationSchema = new mongoose.Schema({
             required : true,
             default: Date.now()
         }}],
-    users: []
+        users: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
+        title: {
+            type : String,
+            required : true
+        },
+        admin : {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }
 });
 
 var Conversation = mongoose.model('Conversation', ConversationSchema);
