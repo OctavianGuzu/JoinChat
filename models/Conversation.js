@@ -3,19 +3,7 @@ var bcrypt = require('bcrypt');
 var ConversationSchema = new mongoose.Schema({
 
 
-    messages: [{from: {
-            type: Number,
-            required: true
-        },
-        text: {
-            type: String,
-            required: true
-        },
-        sent: {
-            type: Date,
-            required : true,
-            default: Date.now()
-        }}],
+    messages: [{text: String}],
         users: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
         title: {
             type : String,

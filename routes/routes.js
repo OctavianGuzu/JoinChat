@@ -319,4 +319,16 @@ router.get('/addFriendToGroup', (req, res, next) =>{
         })
 });
 
+router.get('/getConversationHistory', function (req, res, next) {
+	var id = req.query.name;
+
+	Conversation.find({_id: id}, function (err, result) {
+		console.log(id, result);
+		if (result)
+			res.json({msgs: result[0].messages});
+		else
+			res.json({msgs: []})
+	})
+})
+
 module.exports = router;

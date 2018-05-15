@@ -77,6 +77,18 @@
             socket_general.emit('init conv', namespace);
             initComm();
 
+             $.get( "/getConversationHistory?name=" + secret, function( data ) {
+                console.log(data);
+                data = data.msgs;
+                if (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        $('#messages').append($('<li>').text(data[i].text));
+                    }
+
+                    
+                  }
+                });
+
         } else {
             // handle data not found
             var a = 1;
