@@ -129,28 +129,61 @@ router.post('/addFriend', (req, res, next) => {
 	var response = {
 		err: false
 	};
+    Conversation.create({}, function (err, _grp) {
+        if (err) {
+            console.log("failed  " + err)
+            res.json({error : true});
+        } else {
 
-    var conditions = {
-        _id: req.session.userId,
-        'friends._id': { $ne: req.query.friend_id }
-    };
 
-    var update = {
-        $addToSet: { friends: { _id : req.query.friend_id} }
-    };
 
-	User.findOneAndUpdate(conditions,
-        update,
-        function(err, model) {
-            if (err) {
-            	console.log(err);
-            	res.json({error : true});
-			}
-			else {
-            	res.json({error : false});
-			}
+            var conditions = {
+                _id: req.query.friend_id,
+                'friends._id': { $ne: req.session.userId }
+            };
+
+            var update = {
+                $addToSet: { friends: { _id : req.session.userId, group: _grp._id} }
+            };
+
+            User.findOneAndUpdate(conditions,
+                update,
+                function(err, model) {
+                    if (err) {
+                        console.log(err);
+                      //  res.json({error : true});
+                    }
+                    else {
+                      //  res.json({error : false});
+                    }
+                }
+            );
+
+
+
+            var conditions = {
+                _id: req.session.userId,
+                'friends._id': { $ne: req.query.friend_id }
+            };
+
+            var update = {
+                $addToSet: { friends: { _id : req.query.friend_id, group: _grp._id} }
+            };
+
+            User.findOneAndUpdate(conditions,
+                update,
+                function(err, model) {
+                    if (err) {
+                        console.log(err);
+                        res.json({error : true});
+                    }
+                    else {
+                        res.json({error : false});
+                    }
+                }
+            );
         }
-    );
+    });
 
 	// For each new friend, we create a default conversation between the 2 :)
 	// //TODO
@@ -249,13 +282,14 @@ router.get('/newGroup', (req, res, next) => {
 		admin: req.session.userId
 	};
 
-    Conversation.create(groupData, function (err, user) {
+    Conversation.create(groupData, function (err, group) {
         if (err) {
             console.log("failed  " + err)
             res.json({error : true});
         } else {
             console.log("added")
             res.json({error : false});
+            console.log(group);
         }
     })
 });

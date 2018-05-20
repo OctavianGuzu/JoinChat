@@ -186,7 +186,7 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
             else
                 convID =  $scope.data._id + fid;
 
-            var win = window.open('http://localhost:3003/chatView?convID=' + convID, '_blank');
+            var win = window.open('http://localhost:3003/chatView?convID=' + fid, '_blank');
             win.focus()
         });
 
@@ -230,12 +230,19 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
             $scope.data = _data;
             $('#name').text("Name: " + _data.name);
             $('#email').text("Email: " + _data.email);
-            //console.log(_data);
-
-            for (var i =0; i < _data.friends.length; i++)
+            console.log(_data);
+            var j = 0;
+            for (j =0; j < _data.friends.length; j++)
             {
-                $http.get('/userInfo?id=' + _data.friends[i]["_id"]).then((res) => {
-                    $('#tbody-friends').append("<tr><td class='td-friend' id_friend='" + res.data._id+ "'><a href=\"#\">" + res.data.name +"</a></td></tr>");
+                $http.get('/userInfo?id=' + _data.friends[j]["_id"]).then((res) => {
+                    for (var i =0 ; i < _data.friends.length; i++)
+                    {
+                        if (_data.friends[i]._id == res.data._id)
+                        {
+                            $('#tbody-friends').append("<tr><td class='td-friend' id_friend='" +  _data.friends[i]["group"] + "'><a href=\"#\">" + res.data.name +"</a></td></tr>");
+                        }
+                    }
+
                     console.log(res.data)
                 });
             }
@@ -244,7 +251,8 @@ dash.controller("dashboardController", ["$scope", "$http", function( $scope, $ht
                var data = res.data;
                for (var i = 0; i < data.length; i++)
                {
-                   $('#tbody-groups').append("<tr><td class='td-group' id_group='" + data[i]._id+ "'><a href='#'>" + data[i].title +"</a></td></tr>");
+                   $('#tbody-groups').append("<tr><td class='td-group' id_group='" + data[i]._id+ "'><a href='#'>" + data[i].title +"</a>" +
+                       "</td></tr>");
                }
             });
         });

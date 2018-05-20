@@ -17,7 +17,8 @@ var UserSchema = new mongoose.Schema({
     required: true,
   },
   friends :{
-    type: [UserSchema]
+    type: [{_id : {type: mongoose.Schema.Types.ObjectId},
+            group: {type: mongoose.Schema.Types.ObjectId, ref: 'Conversation'}}]
   },
   administrator: {
     type: Boolean,
