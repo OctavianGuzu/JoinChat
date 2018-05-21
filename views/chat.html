@@ -91,14 +91,18 @@
                 data = data.msgs;
                 if (data) {
                     for (var i = 0; i < data.length; i++) {
-                        if (data[i].text.search(/\*.*\*/) != -1) {
-                            $('#messages').append("<li><strong>" + data[i].text.replace(/\*/g, "") + "</strong></li>")
-                        } else if (data[i].text.search(/'.*'/) != -1) {
-                            $('#messages').append("<li><i>" + data[i].text.replace(/'/g, "") + "</i></li>");
-                        } else if (data[i].text.search(/`.*`/) != -1) {
-                            $('#messages').append("<li><u>" + data[i].text.replace(/`/g, "") + "</u></li>");
+                        var dec_msg = data[i].text.split("").map(function (c) {
+                            return String.fromCharCode(c.charCodeAt(0) ^ 2);
+                        }).join("");
+                        if (dec_msg.search(/\*.*\*/) != -1) {
+                            $('#messages').append("<li><strong>" + dec_msg.replace(/\*/g, "") + "</strong></li>")
+                        } else if (dec_msg.search(/'.*'/) != -1) {
+                            $('#messages').append("<li><i>" + dec_msg.replace(/'/g, "") + "</i></li>");
+                        } else if (dec_msg.search(/`.*`/) != -1) {
+                            $('#messages').append("<li><u>" + dec_msg.replace(/`/g, "") + "</u></li>");
                         }else {
-                            $('#messages').append($('<li><strong>').text(data[i].text));
+
+                            $('#messages').append($('<li><strong>').text(dec_msg));
                         }
                     }
 

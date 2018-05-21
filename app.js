@@ -9,6 +9,7 @@ var MongoStore = require('connect-mongo')(session);
 var path = require('path');
 var routes = require('./routes/routes');
 var Conversation = require('./models/Conversation')
+var xor_crypt = require('xor-crypt')
 var io_namespaces = {}
 
 //connect to MongoDB
@@ -105,7 +106,9 @@ io.on('connection', function(socket){
         //console.log(nsp);
         nsp.on('connection', function(socket){
            socket.on('chat message', function(msg) {
-              Conversation.update({_id: nsp.name.split("/")[1]}, {$push: {messages: {text: msg}}}, function (err, result) {
+            var enc = xor_crypt(msg, 2);
+            console.log(enc);
+              Conversation.update({_id: nsp.name.split("/")[1]}, {$push: {messages: {text: enc}}}, function (err, result) {
                 console.log(result);
               })
               nsp.emit('chat message', msg)
