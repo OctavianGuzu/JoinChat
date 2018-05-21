@@ -40,7 +40,16 @@
             return false;
         });
         socket.on('chat message', function(msg){
-            $('#messages').append($('<li>').text(msg));
+            if (msg.search(/\*.*\*/) != -1) {
+                $('#messages').append("<li><strong>" + msg.replace(/\*/g, "") + "</strong></li>");
+            } else if (msg.search(/'.*'/) != -1) {
+                $('#messages').append("<li><i>" + msg.replace(/'/g, "") + "</i></li>");
+            } else if (msg.search(/`.*`/) != -1) {
+                $('#messages').append("<li><u>" + msg.replace(/`/g, "") + "</u></li>");
+            } else {
+                $('#messages').append($('<li><strong>').text(msg));
+            }
+            
             window.scrollTo(0, document.body.scrollHeight);
         });
     };
@@ -82,7 +91,15 @@
                 data = data.msgs;
                 if (data) {
                     for (var i = 0; i < data.length; i++) {
-                        $('#messages').append($('<li>').text(data[i].text));
+                        if (data[i].text.search(/\*.*\*/) != -1) {
+                            $('#messages').append("<li><strong>" + data[i].text.replace(/\*/g, "") + "</strong></li>")
+                        } else if (data[i].text.search(/'.*'/) != -1) {
+                            $('#messages').append("<li><i>" + data[i].text.replace(/'/g, "") + "</i></li>");
+                        } else if (data[i].text.search(/`.*`/) != -1) {
+                            $('#messages').append("<li><u>" + data[i].text.replace(/`/g, "") + "</u></li>");
+                        }else {
+                            $('#messages').append($('<li><strong>').text(data[i].text));
+                        }
                     }
 
                     
